@@ -3,7 +3,7 @@ import { IconSettings, IconBell, IconSearch, IconLogout } from "@tabler/icons-re
 import { signOut } from "@/lib/services/userAuth"; // Adjust the import path as necessary
 
 export default function TopNavbar() {
-  const handleLogout = async (e) => {
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // Prevent default behavior
     try {
       const response = await signOut();
