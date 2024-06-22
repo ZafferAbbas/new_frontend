@@ -12,7 +12,7 @@ import { BaseUrl } from "@/constants/Constants";
 import { createProduct, updateProductItem, deleteItemById, findItemById } from "@/lib/services/product";
 import spinnerStype from './Spinner.module.css';
 import { useRouter, useSearchParams } from 'next/navigation';
-// import withAuth from "@/lib/withAuth";
+import withAuth from "@/lib/withAuth";
 
 const Select = ({ name, onChange = null, value = "", children }) => {
   return (
@@ -536,5 +536,5 @@ function Home() {
   );
 }
 
-// export default withAuth(Home);
-export default Home;
+export default withAuth(Home);
+// export default Home;
