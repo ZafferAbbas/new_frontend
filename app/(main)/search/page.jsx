@@ -8,7 +8,7 @@ import ProductCard from "@/components/productCard";
 import { SwiperSlide } from "swiper/react";
 import { getAllUserProducts, liveSearch } from "@/lib/services/product";
 import Link from "next/link";
-import withAuth from "@/lib/withAuth";
+// import withAuth from "@/lib/withAuth";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -122,4 +122,5 @@ function Home() {
   );
 }
 
-export default withAuth(Home);
+// export default withAuth(Home);
+export default Home;
