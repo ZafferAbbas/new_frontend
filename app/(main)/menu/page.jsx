@@ -7,7 +7,7 @@ import MainContent from "@/components/maincontent";
 import Banner2 from "@/components/banner2";
 import Modal from "react-modal";
 import { generateQRCodePDF } from "@/lib/services/product";
-// import withAuth from "@/lib/withAuth";
+import withAuth from "@/lib/withAuth";
 
 const Home = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -141,5 +141,5 @@ const Home = () => {
   );
 };
 
-// export default withAuth(Home);
-export default Home;
+export default withAuth(Home);
+// export default Home;
