@@ -9,7 +9,7 @@ import { getUserProductsByCategory, updateProductItem, reorderProducts, setProdu
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { SortableContext, useSortable, arrayMove, rectSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import withAuth from "@/lib/withAuth";
+// import withAuth from "@/lib/withAuth";
 
 function DraggableProductCard({ id, children }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
@@ -280,4 +280,5 @@ function Home() {
   );
 }
 
-export default withAuth(Home);
+// export default withAuth(Home);
+export default Home;
