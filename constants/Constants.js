@@ -1,2 +1,2 @@
 // export const BaseUrl = "https://yeast.mushsolution.com/"
-export const BaseUrl = "http://localhost:4000/"
+export const BaseUrl = "https://api.yeasty.vrexx.org/"
