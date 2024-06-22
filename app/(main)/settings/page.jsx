@@ -7,7 +7,7 @@ import MainContent from "@/components/maincontent";
 import { getUserInfo, editProfile, changePassword, inviteSubUser, toggleSubUserStatus } from "@/lib/services/userAuth";
 import { getSubUserById } from "@/lib/services/subUser"; 
 import { toast } from "sonner";
-// import withAuth from "@/lib/withAuth";
+import withAuth from "@/lib/withAuth";
 
 function Settings() {
   const [userInfo, setUserInfo] = useState({
@@ -405,5 +405,5 @@ function Settings() {
   );
 }
 
-// export default withAuth(Settings);
-export default Settings;
+export default withAuth(Settings);
+// export default Settings;
