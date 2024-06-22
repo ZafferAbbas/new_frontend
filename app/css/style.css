@@ -1,0 +1,58 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+
+/* Additional styles */
+@import "additional-styles/utility-patterns.css";
+@import "additional-styles/theme.css";
+
+@import "tailwindcss/utilities";
+
+/* Additional Tailwind directives: https://tailwindcss.com/docs/functions-and-directives/#responsive */
+@layer utilities {
+	.rtl {
+		direction: rtl;
+	}
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 7px;
+	height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+.menuitem:hover {
+	box-shadow: -5px 5px 20px -5px #00daea, 0px 0px 20px 0px #c441f4;
+}
+
+.active {
+	box-shadow: -5px 5px 20px -5px #00daea, 0px 0px 20px 0px #c441f4;
+}
+
+.main-container {
+	width: 100vw;
+	height: 100vh;
+	background: #f7cbfd;
+	background: radial-gradient(circle farthest-corner at bottom center, #f7cbfd 0%, #7758d1 80%);
+	display: grid;
+	grid-template-columns: 72px auto;
+}
+
+.img-container {
+	width: 100% !important;
+	height: 100% !important;
+}
