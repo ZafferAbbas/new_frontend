@@ -3,13 +3,15 @@ import { IconSettings, IconBell, IconSearch, IconLogout } from "@tabler/icons-re
 import { signOut } from "@/lib/services/userAuth"; // Adjust the import path as necessary
 
 export default function TopNavbar() {
-  const handleLogout = async () => {
+  const handleLogout = async (e) => {
+    e.preventDefault(); // Prevent default behavior
     try {
       const response = await signOut();
       if (response.status === 200) {
         console.log("Logout successful");
-        // Redirect to login page or handle post-logout logic here
-        window.location.href = "/signin"; // Adjust the path as needed
+        // Clear cookies client-side for good measure
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = "/signin"; // Redirect to sign-in page
       } else {
         console.error("Logout failed");
       }
