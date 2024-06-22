@@ -4,7 +4,7 @@ import SideMenu from "@/components/sideMenu";
 import TopNavbar from "@/components/topnavbar";
 import MainContent from "@/components/maincontent";
 import ProductCard from "@/components/productCard";
-import withAuth from "@/lib/withAuth";
+// import withAuth from "@/lib/withAuth";
 
 function Home() {
 	return (
@@ -32,4 +32,5 @@ function Home() {
 	);
 }
 
-export default withAuth(Home);
+// export default withAuth(Home);
+export default Home;
