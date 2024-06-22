@@ -8,7 +8,7 @@ import Banner from "@/components/banner";
 import ProductCard from "@/components/productCard";
 import { getActiveProductsByCategory } from "@/lib/services/product";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import withAuth from "@/lib/withAuth";
+import withAuth from "@/lib/withAuth";
 
 const MyMenu = () => {
   const [draftProducts, setDraftProducts] = useState([]);
@@ -127,5 +127,5 @@ const MyMenu = () => {
   );
 };
 
-// export default withAuth(MyMenu);
-export default MyMenu;
+export default withAuth(MyMenu);
+// export default MyMenu;
