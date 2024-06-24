@@ -13,6 +13,7 @@ import { createProduct, updateProductItem, deleteItemById, findItemById } from "
 import spinnerStype from './Spinner.module.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 import withAuth from "@/lib/withAuth";
+import Loader from "@/components/loader";
 
 const Select = ({ name, onChange = null, value = "", children }) => {
   return (
@@ -64,9 +65,9 @@ function Home() {
   const [pricings, setPricings] = useState([{ size: 1, price: 0 }]);
   const [imgSelected, SetImgSelected] = useState(false);
 
-  const [loading, setLoading] = useState(false)
-  const [itemData, setItemData] = useState(null)
-  const [isUpdate, setIsUpdate] = useState(false)
+  const [loading, setLoading] = useState(true);
+  const [itemData, setItemData] = useState(null);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const ImageToUrlHandler = async (file) => {
     const formData = new FormData();
@@ -86,25 +87,17 @@ function Home() {
       setFormFields({
         ...formFields,
         imageUrl: data.imageUrl
-      })
+      });
 
       return data;
     } catch (error) {
       console.error('Error posting image:', error);
     }
-  }
-
-//   const GetUserData = async () => {
-//     const userData = localStorage.getItem('userSuccessData');
-//     if (userData) {
-//       const JsonData = JSON.parse(userData)
-//       return JsonData
-//     }
-//   }
+  };
 
   const onImageAdd = (e) => {
     const file = e.target.files[0];
-    ImageToUrlHandler(file)
+    ImageToUrlHandler(file);
 
     const reader = new FileReader();
 
@@ -124,9 +117,10 @@ function Home() {
   };
 
   const GetItemDetailById = async (id) => {
+    setLoading(true);
     try {
       const response = await findItemById({ _id: id });
-	  console.log(response);
+      console.log(response);
       if (response.data.status === 200) {
         setItemData(response.data.record);
       } else {
@@ -135,8 +129,10 @@ function Home() {
     } catch (error) {
       console.error("Error fetching item details:", error);
       toast.error("Error fetching item details");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (itemId) {
@@ -144,6 +140,7 @@ function Home() {
       GetItemDetailById(itemId);
     } else {
       setIsUpdate(false);
+      setLoading(false);
     }
   }, [itemId]);
 
@@ -202,13 +199,6 @@ function Home() {
   };
 
   const onSave = async () => {
-    // const userData = await GetUserData();
-
-    // if (!userData) {
-    //   toast.warning("User not found");
-    //   return;
-    // }
-
     if (formFields.productName === "") {
       toast.warning("Product name is mandatory");
       return;
@@ -277,13 +267,6 @@ function Home() {
   };
 
   const onUpdate = async () => {
-    // const userData = await GetUserData();
-
-    // if (!userData) {
-    //   toast.warning("User not found");
-    //   return;
-    // }
-
     if (formFields.productName === "") {
       toast.warning("Product name is mandatory");
       return;
@@ -310,26 +293,26 @@ function Home() {
       return;
     } else {
       const productData = {
-		_id: itemData?._id,
-		updates: {
-			productName: formFields.productName,
-			abv: formFields.abv,
-			category: formFields.category,
-			description: formFields.description,
-			type: formFields.type,
-			style: formFields.style,
-			producer: formFields.producer,
-			quantity: Number(formFields.quantity),
-			pricintList: pricings,
-			imageUrl: formFields.imageUrl
-		}
+        _id: itemData?._id,
+        updates: {
+          productName: formFields.productName,
+          abv: formFields.abv,
+          category: formFields.category,
+          description: formFields.description,
+          type: formFields.type,
+          style: formFields.style,
+          producer: formFields.producer,
+          quantity: Number(formFields.quantity),
+          pricintList: pricings,
+          imageUrl: formFields.imageUrl
+        }
       };
 
       try {
         const response = await updateProductItem(productData);
         if (response.data.status === "success") {
           toast.success("Item Updated Successfully");
-		  console.log("it actually worked fr" );
+          console.log("it actually worked fr" );
           router.push(`/${formFields.category.toLowerCase()}`);
         } else {
           toast.error("Failed to update product");
@@ -380,161 +363,165 @@ function Home() {
 
   return (
     <div className="main-container">
-      <SideMenu />
-      <div className="overflow-hidden">
-        <TopNavbar />
-        <MainContent>
-          <div className="container">
-            <Banner bgImgSrc="/images/item1.jpg" title="Brazil Loves New England" />
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-              <div className="col-span-2">
-                <div className="bg-[#060B28] rounded-[20px] px-8 py-4 h-[600px] overflow-y-auto">
-                  <p className="text-lg font-bold text-white mb-4">Product Image</p>
-                  <img src={formFields.imageUrl ? formFields.imageUrl : "https://via.placeholder.com/350x450"} alt="item" className="w-full mb-4" ref={imgRef} />
-                  <div className="flex justify-center gap-4 text-[10px] text-[#0F1535] font-black">
-                    <label htmlFor="uploadImg" className="bg-white rounded-lg w-[100px] h-7 grid place-items-center cursor-pointer">
-                      ADD
-                    </label>
-                    <input type="file" id="uploadImg" className="opacity-0 absolute -z-10" onChange={onImageAdd} />
-                    <div className="bg-white rounded-lg w-[100px] h-7 grid place-items-center cursor-pointer" onClick={onImageRemove}>
-                      REMOVE
+      {loading && <Loader />}
+      {!loading && (
+        <>
+          <SideMenu />
+          <div className="overflow-hidden">
+            <TopNavbar />
+            <MainContent>
+              <div className="container">
+                <Banner bgImgSrc="/images/item1.jpg" title="Brazil Loves New England" />
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                  <div className="col-span-2">
+                    <div className="bg-[#060B28] rounded-[20px] px-8 py-4 h-[600px] overflow-y-auto">
+                      <p className="text-lg font-bold text-white mb-4">Product Image</p>
+                      <img src={formFields.imageUrl ? formFields.imageUrl : "https://via.placeholder.com/350x450"} alt="item" className="w-full mb-4" ref={imgRef} />
+                      <div className="flex justify-center gap-4 text-[10px] text-[#0F1535] font-black">
+                        <label htmlFor="uploadImg" className="bg-white rounded-lg w-[100px] h-7 grid place-items-center cursor-pointer">
+                          ADD
+                        </label>
+                        <input type="file" id="uploadImg" className="opacity-0 absolute -z-10" onChange={onImageAdd} />
+                        <div className="bg-white rounded-lg w-[100px] h-7 grid place-items-center cursor-pointer" onClick={onImageRemove}>
+                          REMOVE
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-2 md:col-span-3 grid gap-4">
+                    <form className="bg-[#060B28] rounded-[20px] px-4 py-2 h-[285px] overflow-y-auto">
+                      <p className="text-lg font-bold text-white mb-2">Product Information</p>
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
+                        <div className="sm:col-span-2">
+                          <p className="text-xs font-bold">Product Name</p>
+                          <input
+                            value={formFields.productName}
+                            onChange={(e) => setFormFields({ ...formFields, productName: e.target.value })}
+                            className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs"
+                            name="pname"
+                            placeholder="Brazil Loves New England"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold">ABV</p>
+                          <NumericInput
+                            value={formFields.abv}
+                            onChange={(value) => setFormFields({ ...formFields, abv: value })}
+                            className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs mb-2"
+                            placeholder="5.8"
+                            min={0}
+                            precision={1}
+                            name="pabv"
+                            noStyle
+                            strict
+                          />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold">Category</p>
+                          <Select name="pcategory" value={formFields.category} onChange={(e) => setFormFields({ ...formFields, category: e.target.value })}>
+                            <option value="draft">draft</option>
+                            <option value="package">package</option>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-4 mb-2">
+                        <div className="flex flex-col">
+                          <p className="text-xs font-bold">Description</p>
+                          <textarea
+                            value={formFields.description}
+                            onChange={(e) => setFormFields({ ...formFields, description: e.target.value })}
+                            className="w-full flex-auto text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs resize-none"
+                            name="pdescription"
+                            placeholder="Some initial Bold text"
+                          ></textarea>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold">Type</p>
+                          <Select name="ptype" value={formFields.type} onChange={(e) => setFormFields({ ...formFields, type: e.target.value })}>
+                            {types.map((type) => (
+                              <option value={type}>{type}</option>
+                            ))}
+                          </Select>
+                          <p className="text-xs font-bold">Style</p>
+                          <Select name="pstyle" value={formFields.style} onChange={(e) => setFormFields({ ...formFields, style: e.target.value })}>
+                            {styles.map((style) => (
+                              <option value={style}>{style}</option>
+                            ))}
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs font-bold">Producer</p>
+                          <input
+                            value={formFields.producer}
+                            onChange={(e) => setFormFields({ ...formFields, producer: e.target.value })}
+                            className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs"
+                            name="pproducer"
+                            placeholder="Ellipsis Brewing"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold">Quantity</p>
+                          <NumericInput
+                            value={formFields.quantity}
+                            onChange={(value) => setFormFields({ ...formFields, quantity: value })}
+                            className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs mb-2"
+                            placeholder="1"
+                            min={1}
+                            max={999}
+                            precision={0}
+                            name="pquantity"
+                            noStyle
+                            strict
+                          />
+                        </div>
+                      </div>
+                    </form>
+                    <div className="bg-[#060B28] rounded-[20px] px-8 py-4 h-[300px] overflow-y-auto">
+                      <p className="text-lg font-bold text-white mb-2">Pricing</p>
+                      {pricings.map((pricing, index) => (
+                        <PricingRow key={index} no={index} onSizeChange={onSizeChange} onPriceChange={onPriceChange} size={pricing.size} price={pricing.price} onDelete={onRemove} />
+                      ))}
+                      <div className="bg-white rounded-full w-[74px] h-7 grid place-items-center text-[10px] text-[#0F1535] font-black cursor-pointer" onClick={onAdd}>
+                        ADD
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-span-2 md:col-span-3 grid gap-4">
-                <form className="bg-[#060B28] rounded-[20px] px-4 py-2 h-[285px] overflow-y-auto">
-                  <p className="text-lg font-bold text-white mb-2">Product Information</p>
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
-                    <div className="sm:col-span-2">
-                      <p className="text-xs font-bold">Product Name</p>
-                      <input
-                        value={formFields.productName}
-                        onChange={(e) => setFormFields({ ...formFields, productName: e.target.value })}
-                        className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs"
-                        name="pname"
-                        placeholder="Brazil Loves New England"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold">ABV</p>
-                      <NumericInput
-                        value={formFields.abv}
-                        onChange={(value) => setFormFields({ ...formFields, abv: value })}
-                        className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs mb-2"
-                        placeholder="5.8"
-                        min={0}
-                        precision={1}
-                        name="pabv"
-                        noStyle
-                        strict
-                      />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold">Category</p>
-                      <Select name="pcategory" value={formFields.category} onChange={(e) => setFormFields({ ...formFields, category: e.target.value })}>
-                        <option value="draft">draft</option>
-                        <option value="package">package</option>
-                      </Select>
-                    </div>
+                <div className="grid grid-cols-2 gap-8 text-xs text-[#0F1535] font-bold">
+                  <div
+                    className="bg-white rounded-xl h-9 grid place-items-center cursor-pointer"
+                    onClick={() => {
+                      if (!loading) {
+                        if (isUpdate) {
+                          onUpdate();
+                        } else {
+                          onSave();
+                        }
+                      }
+                    }}
+                  >
+                    {loading ? <div className={spinnerStype.spinner}></div> : "SAVE"}
                   </div>
-                  <div className="grid sm:grid-cols-2 gap-4 mb-2">
-                    <div className="flex flex-col">
-                      <p className="text-xs font-bold">Description</p>
-                      <textarea
-                        value={formFields.description}
-                        onChange={(e) => setFormFields({ ...formFields, description: e.target.value })}
-                        className="w-full flex-auto text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs resize-none"
-                        name="pdescription"
-                        placeholder="Some initial Bold text"
-                      ></textarea>
+                  {isUpdate && (
+                    <div
+                      className="bg-white rounded-xl h-9 grid place-items-center cursor-pointer"
+                      onClick={() => {
+                        DeleteItemHandler(itemData?._id);
+                      }}
+                    >
+                      DELETE
                     </div>
-                    <div>
-                      <p className="text-xs font-bold">Type</p>
-                      <Select name="ptype" value={formFields.type} onChange={(e) => setFormFields({ ...formFields, type: e.target.value })}>
-                        {types.map((type) => (
-                          <option value={type}>{type}</option>
-                        ))}
-                      </Select>
-                      <p className="text-xs font-bold">Style</p>
-                      <Select name="pstyle" value={formFields.style} onChange={(e) => setFormFields({ ...formFields, style: e.target.value })}>
-                        {styles.map((style) => (
-                          <option value={style}>{style}</option>
-                        ))}
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs font-bold">Producer</p>
-                      <input
-                        value={formFields.producer}
-                        onChange={(e) => setFormFields({ ...formFields, producer: e.target.value })}
-                        className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs"
-                        name="pproducer"
-                        placeholder="Ellipsis Brewing"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold">Quantity</p>
-                      <NumericInput
-                        value={formFields.quantity}
-                        onChange={(value) => setFormFields({ ...formFields, quantity: value })}
-                        className="w-full text-[#e1e1e1] bg-[#0F1535] rounded-2xl border border-[#6271c2] px-3 py-1 text-xs mb-2"
-                        placeholder="1"
-                        min={1}
-                        max={999}
-                        precision={0}
-                        name="pquantity"
-                        noStyle
-                        strict
-                      />
-                    </div>
-                  </div>
-                </form>
-                <div className="bg-[#060B28] rounded-[20px] px-8 py-4 h-[300px] overflow-y-auto">
-                  <p className="text-lg font-bold text-white mb-2">Pricing</p>
-                  {pricings.map((pricing, index) => (
-                    <PricingRow key={index} no={index} onSizeChange={onSizeChange} onPriceChange={onPriceChange} size={pricing.size} price={pricing.price} onDelete={onRemove} />
-                  ))}
-                  <div className="bg-white rounded-full w-[74px] h-7 grid place-items-center text-[10px] text-[#0F1535] font-black cursor-pointer" onClick={onAdd}>
-                    ADD
-                  </div>
+                  )}
                 </div>
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-8 text-xs text-[#0F1535] font-bold">
-              <div
-                className="bg-white rounded-xl h-9 grid place-items-center cursor-pointer"
-                onClick={() => {
-                  if (!loading) {
-                    if (isUpdate) {
-                      onUpdate();
-                    } else {
-                      onSave();
-                    }
-                  }
-                }}
-              >
-                {loading ? <div className={spinnerStype.spinner}></div> : "SAVE"}
-              </div>
-              {isUpdate && (
-                <div
-                  className="bg-white rounded-xl h-9 grid place-items-center cursor-pointer"
-                  onClick={() => {
-                    DeleteItemHandler(itemData?._id);
-                  }}
-                >
-                  DELETE
-                </div>
-              )}
-            </div>
+            </MainContent>
           </div>
-        </MainContent>
-      </div>
+        </>
+      )}
     </div>
   );
 }
 
 export default withAuth(Home);
-// export default Home;
