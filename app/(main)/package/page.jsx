@@ -282,7 +282,6 @@ function Home() {
                           </DraggableProductCard>
                         );
                       })}
-                      <AddNewCard />
                     </DroppableContainer>
                   </SortableContext>
                   <DragOverlay>
