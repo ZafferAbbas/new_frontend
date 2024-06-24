@@ -11,9 +11,7 @@ import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, rectI
 import { SortableContext, useSortable, arrayMove, sortableKeyboardCoordinates, rectSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import withAuth from "@/lib/withAuth";
-// import "../../css/style.css";
 import Loader from "@/components/loader"
-
 
 function DraggableProductCard({ id, children }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
@@ -25,6 +23,10 @@ function DraggableProductCard({ id, children }) {
     opacity: isDragging ? 0.0 : 1,
     zIndex: isDragging ? 1000 : 'auto',
     marginRight: '16px',
+    flex: '0 0 auto',
+    width: '100%',
+    maxWidth: '355px',
+    height: 'auto',
   };
 
   return (
@@ -67,8 +69,16 @@ function DroppableContainer({ id, children }) {
 }
 
 function AddNewCard() {
+  const style = {
+    flex: '0 0 auto',
+    width: '100%',
+    maxWidth: '355px',
+    height: 'auto',
+    flexShrink: 0,
+  };
+
   return (
-    <div style={{ width: '355px', height: '300px', flexShrink: 0 }}>
+    <div style={style}>
       <Link href="/edit">
         <div style={{ width: '100%', height: '100%' }}>
           <ProductCard
@@ -209,15 +219,6 @@ function Home() {
 
   const getItemById = (id) => items.find((item) => item._id === id);
 
-  // if (loading) {
-  //   return (
-  //     <div className="loading-screen">
-  //       Loading...
-  //     </div>
-  //   );
-  // }
-
-
   return (
     <div className="main-container">
       {loading && <Loader />}
@@ -243,7 +244,7 @@ function Home() {
                         );
                         return (
                           <DraggableProductCard key={i._id} id={i._id}>
-                            <div style={{ width: '355px', height: '300px', flexShrink: 0 }}>
+                            <div className="flex-0 flex-shrink-0 w-full max-w-[355px] h-auto">
                               <ProductCard
                                 recordId={i._id}
                                 updateAction={() => {
@@ -275,7 +276,7 @@ function Home() {
                         );
                         return (
                           <DraggableProductCard key={i._id} id={i._id}>
-                            <div style={{ width: '355px', height: '300px', flexShrink: 0 }}>
+                            <div className="flex-0 flex-shrink-0 w-full max-w-[355px] h-auto">
                               <ProductCard
                                 recordId={i._id}
                                 updateAction={() => {
@@ -295,7 +296,7 @@ function Home() {
                   </SortableContext>
                   <DragOverlay>
                     {activeId ? (
-                      <div style={{ width: '355px', height: '300px', flexShrink: 0 }}>
+                      <div className="flex-0 flex-shrink-0 w-full max-w-[355px] h-auto">
                         <ProductCard
                           bgImgSrc={getItemById(activeId)?.imageUrl}
                           num={getItemById(activeId)?.quantity}
