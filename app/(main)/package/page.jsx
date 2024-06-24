@@ -1,5 +1,4 @@
 "use client";
-"use client";
 import React, { useEffect, useState, useRef } from "react";
 import Link from 'next/link';
 import SideMenu from "@/components/sideMenu";
@@ -12,8 +11,7 @@ import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, rectI
 import { SortableContext, useSortable, arrayMove, sortableKeyboardCoordinates, rectSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import withAuth from "@/lib/withAuth";
-// import "../../css/style.css";
-import Loader from "@/components/loader"
+import Loader from "@/components/loader";
 
 function DraggableProductCard({ id, children }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
@@ -25,6 +23,10 @@ function DraggableProductCard({ id, children }) {
     opacity: isDragging ? 0.0 : 1,
     zIndex: isDragging ? 1000 : 'auto',
     marginRight: '16px',
+    flex: '0 0 auto',
+    width: '100%',
+    maxWidth: '355px',
+    height: 'auto',
   };
 
   return (
@@ -41,7 +43,7 @@ function DraggableProductCard({ id, children }) {
   );
 }
 
-function DroppableContainer({ id, children, containerRef }) {
+function DroppableContainer({ id, children }) {
   const { setNodeRef } = useDroppable({
     id,
   });
@@ -67,15 +69,23 @@ function DroppableContainer({ id, children, containerRef }) {
 }
 
 function AddNewCard() {
+  const style = {
+    flex: '0 0 auto',
+    width: '100%',
+    maxWidth: '355px',
+    height: 'auto',
+    flexShrink: 0,
+  };
+
   return (
-    <div style={{ width: '355px', height: '300px', flexShrink: 0 }}>
+    <div style={style}>
       <Link href="/edit">
         <div style={{ width: '100%', height: '100%' }}>
           <ProductCard
             bgImgSrc="/images/cardbg3.png"
             num="+"
-            title="Add New Draft"
-            description="Search for new draft to add"
+            title="Add New Package"
+            description="Search for new package to add"
             members={[]}
           />
         </div>
@@ -220,7 +230,7 @@ function Home() {
             <MainContent>
               <div className="container">
                 <Banner bgImgSrc="/images/banner1.jpg" title="Your Digital Menu" />
-                <div className="text-[22px] text-white font-semibold mb-1">Current Package List</div>
+                <div className="text-[22px] text-white font-semibold mb-1">Current Tap List</div>
                 <DndContext sensors={sensors} collisionDetection={rectIntersection} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                   <SortableContext items={currentListItems.map(item => item._id)} strategy={rectSortingStrategy}>
                     <DroppableContainer id="currentList" containerRef={currentListContainerRef}>
@@ -234,7 +244,7 @@ function Home() {
                         );
                         return (
                           <DraggableProductCard key={i._id} id={i._id}>
-                            <div style={{ width: '355px', height: '300px', flexShrink: 0 }}>
+                            <div className="flex-0 flex-shrink-0 w-full max-w-[355px] h-auto">
                               <ProductCard
                                 recordId={i._id}
                                 updateAction={() => {
@@ -266,7 +276,7 @@ function Home() {
                         );
                         return (
                           <DraggableProductCard key={i._id} id={i._id}>
-                            <div style={{ width: '355px', height: '300px', flexShrink: 0 }}>
+                            <div className="flex-0 flex-shrink-0 w-full max-w-[355px] h-auto">
                               <ProductCard
                                 recordId={i._id}
                                 updateAction={() => {
@@ -286,7 +296,7 @@ function Home() {
                   </SortableContext>
                   <DragOverlay>
                     {activeId ? (
-                      <div style={{ width: '355px', height: '300px', flexShrink: 0 }}>
+                      <div className="flex-0 flex-shrink-0 w-full max-w-[355px] h-auto">
                         <ProductCard
                           bgImgSrc={getItemById(activeId)?.imageUrl}
                           num={getItemById(activeId)?.quantity}
