@@ -20,7 +20,7 @@ const LoginPageSection = () => {
     const waitForCookies = (callback: () => void) => {
         const interval = setInterval(() => {
             if (checkCookies()) {
-                console.log("cookie set successfully);
+                console.log("cookie set successfully");
                 clearInterval(interval);
                 callback();
             }
