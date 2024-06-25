@@ -63,7 +63,7 @@ const LoginPageSection = () => {
 		// }
 
 		// setTimeout(() => {
-		    router.refresh();
+		    // router.refresh();
                     router.push('/menu');
                 // }, 3000); // slight delay to ensure the state is updated
             } else {
