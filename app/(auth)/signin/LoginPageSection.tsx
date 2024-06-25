@@ -14,6 +14,7 @@ const LoginPageSection = () => {
     const [password, setPassword] = useState<string>("");
 
     const checkCookies = (): boolean => {
+        console.log(document.cookie);
         return !!Cookies.get('token'); // Replace 'your-cookie-name' with the actual cookie name
     }
 
