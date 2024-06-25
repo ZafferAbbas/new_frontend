@@ -56,8 +56,10 @@ const LoginPageSection = () => {
             const response = await signIn({ email, password });
 
             if (response.status === 200) {
-                toast.success("Login Successfully");
-                router.push('/menu');
+		setTimeout(() => {
+		    router.refresh();
+                    router.push('/menu');
+                }, 3000); // slight delay to ensure the state is updated
             } else {
                 setEmail("");
                 setPassword("");
