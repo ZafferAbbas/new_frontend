@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import httpReq from "@/lib/httpReq";
 import { BaseUrl } from "../../../constants/Constants"
 import { useRouter } from 'next/navigation';
-import { signIn, verifyToken } from "@/lib/services/userAuth";
+import { signIn } from "..//../../lib/services/userAuth";
 
 const LoginPageSection = () => {
 	const router = useRouter();
@@ -32,7 +32,7 @@ const LoginPageSection = () => {
 	// 		redirect: "follow"
 	// 	};
 
-	// 	fetch(${BaseUrl}user/api/userSignIn, requestOptions)
+	// 	fetch(`${BaseUrl}user/api/userSignIn`, requestOptions)
 	// 		.then((response: Response) => response.json())
 	// 		.then((result: string | any) => {
 	// 			console.log(result)
@@ -57,15 +57,7 @@ const LoginPageSection = () => {
 
             if (response.status === 200) {
                 toast.success("Login Successfully");
-		// const confirmLogin = await verifyToken();
-		// if (confirmLogin.status === 200) {
-		// 	router.push('/menu');
-		// }
-
-		// setTimeout(() => {
-		    // router.refresh();
-                    router.push('/menu');
-                // }, 3000); // slight delay to ensure the state is updated
+                router.push('/menu');
             } else {
                 setEmail("");
                 setPassword("");
