@@ -62,9 +62,9 @@ const LoginPageSection = () => {
 		// 	router.push('/menu');
 		// }
 
-		setTimeout(() => {
+		// setTimeout(() => {
                     router.push('/menu');
-                }, 3000); // slight delay to ensure the state is updated
+                // }, 3000); // slight delay to ensure the state is updated
             } else {
                 setEmail("");
                 setPassword("");
