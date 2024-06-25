@@ -57,9 +57,10 @@ const LoginPageSection = () => {
 
             if (response.status === 200) {
                 toast.success("Login Successfully");
-                setTimeout(() => {
-                    router.push('/menu');
-                }, 100); // slight delay to ensure the state is updated
+		const confirmLogin = await verifyToken();
+		if (confirmLogin.status === 200) {
+			router.push('/menu');
+		}
             } else {
                 setEmail("");
                 setPassword("");
