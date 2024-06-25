@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import httpReq from "@/lib/httpReq";
 import { BaseUrl } from "../../../constants/Constants"
 import { useRouter } from 'next/navigation';
-import { signIn } from "..//../../lib/services/userAuth";
+import { signIn, verifyToken } from "@/lib/services/userAuth";
 
 const LoginPageSection = () => {
 	const router = useRouter();
