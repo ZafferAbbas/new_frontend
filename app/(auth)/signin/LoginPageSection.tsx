@@ -14,7 +14,7 @@ const LoginPageSection = () => {
     const [password, setPassword] = useState<string>("");
 
     const checkCookies = (): boolean => {
-        console.log(document.cookie);
+        // console.log(document.cookie);
         return !!Cookies.get('token'); // Replace 'your-cookie-name' with the actual cookie name
     }
 
@@ -34,6 +34,7 @@ const LoginPageSection = () => {
 
             if (response.status === 200) {
                 toast.success("Login Successfully");
+                        console.log(document.cookie);
                 waitForCookies(() => {
                     router.push('/menu');
                 });
